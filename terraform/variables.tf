@@ -16,7 +16,8 @@ variable "vpc_cidr" {
   description = "The CIDR block for the VPC"
 }
 
-variable "tag_name" {
+variable "tags" {
+  type = map(string)
   description = "A map of tags to assign to the resource"
 }
 

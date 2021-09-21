@@ -1,9 +1,7 @@
 resource "aws_key_pair" "ssh" {
   key_name   = "ivssh2"
   public_key = file("keys.pub")
-  tags = {
-    Name = "${var.tag_name}-key"
-  }
+  tags = var.tags
 }
 
 resource "aws_instance" "EC2_public" {
@@ -11,7 +9,7 @@ resource "aws_instance" "EC2_public" {
   instance_type = var.ec2_type
   subnet_id = aws_subnet.public.id
   key_name = aws_key_pair.ssh.id
-  vpc_security_group_ids = aws_security_group.allow_ssh.id
+  vpc_security_group_ids = [aws_security_group.allow_ssh_public.id]
 }
 
 resource "aws_instance" "EC2_private" {
@@ -19,7 +17,7 @@ resource "aws_instance" "EC2_private" {
   instance_type = var.ec2_type
   subnet_id = aws_subnet.private.id
   key_name = aws_key_pair.ssh.id
-  vpc_security_group_ids = aws_security_group.allow_ssh.id
+  vpc_security_group_ids = [aws_security_group.allow_ssh_private.id]
 }
 
 #variable "subnet_ids" {
