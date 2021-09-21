@@ -14,6 +14,6 @@ output "internet_gateway_id" {
   value = aws_internet_gateway.igw.id
 }
 
-output "default_security_group" {
-  value = "${aws_vpc.main.default_security_group_id}"
-}
+#output "EIP_IP" {
+#  value = aws_eip.eip.public_ip
+#}

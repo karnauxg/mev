@@ -1,30 +1,35 @@
-resource "aws_instance" "web1" {
-    ami = "${lookup(var.AMI, var.AWS_REGION)}"
-    instance_type = "t2.micro"
-    # VPC
-    subnet_id = "${aws_subnet.prod-subnet-public-1.id}"
-    # Security Group
-    vpc_security_group_ids = ["${aws_security_group.ssh-allowed.id}"]
-    # the Public SSH key
-    key_name = "${aws_key_pair.london-region-key-pair.id}"
-    # nginx installation
-    provisioner "file" {
-        source = "nginx.sh"
-        destination = "/tmp/nginx.sh"
-    }
-    provisioner "remote-exec" {
-        inline = [
-             "chmod +x /tmp/nginx.sh",
-             "sudo /tmp/nginx.sh"
-        ]
-    }
-    connection {
-        user = "${var.EC2_USER}"
-        private_key = "${file("${var.PRIVATE_KEY_PATH}")}"
-    }
+resource "aws_key_pair" "ssh" {
+  key_name   = "ivssh2"
+  public_key = file("keys.pub")
+  tags = {
+    Name = "${var.tag_name}-key"
+  }
 }
-// Sends your public key to the instance
-resource "aws_key_pair" "london-region-key-pair" {
-    key_name = "london-region-key-pair"
-    public_key = "${file(var.PUBLIC_KEY_PATH)}"
+
+resource "aws_instance" "EC2_public" {
+  ami = var.AMI
+  instance_type = var.ec2_type
+  subnet_id = aws_subnet.public.id
+  key_name = aws_key_pair.ssh.id
+  vpc_security_group_ids = aws_security_group.allow_ssh.id
 }
+
+resource "aws_instance" "EC2_private" {
+  ami = var.AMI
+  instance_type = var.ec2_type
+  subnet_id = aws_subnet.private.id
+  key_name = aws_key_pair.ssh.id
+  vpc_security_group_ids = aws_security_group.allow_ssh.id
+}
+
+#variable "subnet_ids" {
+#  default =  [ aws_subnet.private.id, aws_subnet.public.id ]
+#}
+#resource "aws_instance" "EC2_private" {
+#  count = var.count
+#  subnet_id = "${element(var.subnet_ids, count.index)}"
+#  ami = var.AMI
+#  instance_type = var.ec2_type
+#  key_name = aws_key_pair.ssh.id
+#  vpc_security_group_ids = aws_security_group.allow_ssh.id
+#}

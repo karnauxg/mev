@@ -28,9 +28,21 @@ variable "private_subnet_cidr" {
   description = "The CIDR block for the subnet"
 }
 
-variable "az" {
+variable "av_zona" {
   description = "The AZ for the subnet"
 }
+
+variable "AMI" {
+  description = "AMI to use for the instance"
+}
+
+variable "ec2_type" {
+  description = "AMI to use for the instance"
+}
+
+#variable "count" {
+#  description = "Count of EC2 for one subnet"
+#}
 
 variable "map_public_ip_on_launch" {
   description = "Specify true to indicate that instances launched into the subnet should be assigned a public IP address"
