@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - develop
-      - main
+      # - main
       - 'release/**'
       - 'hotfix/**'
       - newlzdev
@@ -31,7 +31,7 @@ jobs:
           echo "It is - DEVELOP"
   
   prod-dev:
-    if: ${{ github.ref_name == 'main' && github.event.inputs.environment == 'dev' }}
+    if: ${{ github.event.inputs.environment == 'dev' }}
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.environment || 'dev' }}
     steps:
@@ -42,7 +42,7 @@ jobs:
           echo "My input env is - ${{ github.event.inputs.environment }}"
 
   prod-apac:
-    if: ${{ github.ref_name == 'main' && github.event.inputs.environment == 'prodeast' }}
+    if: ${{ github.event.inputs.environment == 'prodeast' }}
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.environment || 'prodeast' }}
     steps:
