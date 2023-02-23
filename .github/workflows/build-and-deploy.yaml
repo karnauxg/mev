@@ -36,7 +36,7 @@ jobs:
     environment: ${{ github.event.inputs.environment || 'dev' }}
     strategy:
       matrix:
-        build_name: "Deploy to - ${{ github.event.inputs.environment }}"
+        build_name: ['MANUAL Deploy to -${{ github.event.inputs.environment }}']
     steps:
       - name: Lint
         run: |
@@ -50,7 +50,7 @@ jobs:
     environment: ${{ github.event.inputs.environment || 'prodeast' }}
     strategy:
       matrix:
-        build_name: "Deploy to - ${{ github.event.inputs.environment }}"
+        build_name: ['MANUAL Deploy to -${{ github.event.inputs.environment }}']
     steps:
       - name: Lint
         run: |
