@@ -1,0 +1,48 @@
+name: Build and deploy
+on:
+  push:
+    branches:
+      - develop
+      - main
+      - 'release/**'
+      - 'hotfix/**'
+      - newlzdev
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Select environment'
+        required: true
+        default: 'NONE'
+        type: choice
+        options:
+        - dev
+        - prodeast
+      # environment:
+      #   type: environment
+jobs:
+  dev:
+    if: ${{ github.ref_name == 'develop' }}
+    runs-on: ubuntu-latest
+    environment: develop
+    steps:
+      - name: Lint
+        run: |
+          echo "It is - DEVELOP"
+  qa:
+    if: ${{ startsWith(github.ref_name, 'release/') || startsWith(github.ref_name, 'hotfix/') }}
+    runs-on: ubuntu-latest
+    environment: qa
+    steps:
+      - name: Lint
+        run: |
+          echo "It is - DEVELOP"
+
+  prod-apac:
+    if: ${{ github.ref_name == 'main' }}
+    runs-on: ubuntu-latest
+    environment:
+      name: prod-apac
+    steps:
+      - name: Lint
+        run: |
+          echo "My input env is - ${{ github.event.inputs.environment }}"
