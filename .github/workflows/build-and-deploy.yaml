@@ -34,6 +34,9 @@ jobs:
     if: ${{ github.ref_name == 'main' && github.event.inputs.environment == 'dev' }}
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.environment || 'dev' }}
+    strategy:
+      matrix:
+        build_name: "Deploy to - ${{ github.event.inputs.environment }}"
     steps:
       - name: Lint
         run: |
@@ -45,11 +48,12 @@ jobs:
     if: ${{ github.ref_name == 'main' && github.event.inputs.environment == 'prodeast' }}
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.environment || 'prodeast' }}
+    strategy:
+      matrix:
+        build_name: "Deploy to - ${{ github.event.inputs.environment }}"
     steps:
       - name: Lint
         run: |
           echo "PROD - env"
           echo "CLOUDFRONT_DISTRIBUTION_ID - ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}"
           echo "My input env is - ${{ github.event.inputs.environment }}"
-        env:
-          DESCRIPTION: ${{ github.event.inputs.environment }}
