@@ -12,7 +12,7 @@ on:
       environment:
         description: 'Select environment'
         required: true
-        default: 'NONE'
+        default: 'none'
         type: choice
         options:
         - dev
@@ -28,21 +28,25 @@ jobs:
       - name: Lint
         run: |
           echo "It is - DEVELOP"
-  qa:
-    if: ${{ startsWith(github.ref_name, 'release/') || startsWith(github.ref_name, 'hotfix/') }}
+  
+  prod-dev:
+    if: ${{ github.ref_name == 'main' }}
     runs-on: ubuntu-latest
-    environment: qa
+    environment: ${{ github.event.inputs.environment }}
     steps:
       - name: Lint
         run: |
-          echo "It is - DEVELOP"
+          echo "DEV - env"
+          echo "AWS_REGION - ${{ secrets.AWS_REGION }}"
+          echo "My input env is - ${{ github.event.inputs.environment }}"
 
   prod-apac:
     if: ${{ github.ref_name == 'main' }}
     runs-on: ubuntu-latest
-    environment:
-      name: prod-apac
+    environment: ${{ github.event.inputs.environment }}
     steps:
       - name: Lint
         run: |
+          echo "PROD - env"
+          echo "CLOUDFRONT_DISTRIBUTION_ID - ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}"
           echo "My input env is - ${{ github.event.inputs.environment }}"
