@@ -51,3 +51,5 @@ jobs:
           echo "PROD - env"
           echo "CLOUDFRONT_DISTRIBUTION_ID - ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}"
           echo "My input env is - ${{ github.event.inputs.environment }}"
+        env:
+          DESCRIPTION: ${{ github.event.inputs.environment }}
