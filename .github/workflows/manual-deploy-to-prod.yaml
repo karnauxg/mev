@@ -1,12 +1,12 @@
-name: Manual-deploy
+name: Build and deploy
 on:
-  push:
-    branches:
-      - develop
-      # - main
-      - 'release/**'
-      - 'hotfix/**'
-      - newlzdev
+  # push:
+  #   branches:
+  #     - develop
+  #     # - main
+  #     - 'release/**'
+  #     - 'hotfix/**'
+  #     - newlzdev
   workflow_dispatch:
     inputs:
       environment:
