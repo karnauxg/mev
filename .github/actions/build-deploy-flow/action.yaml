@@ -1,0 +1,29 @@
+name: Manual-deploy
+description: Run buil and deploy
+inputs:
+  environment:
+    required: true
+    description: ""
+  PROD_EAST:
+    required: false
+    description: ""
+  S3_BUCKET:
+    required: false
+    description: ""
+  AWS_REGION:
+    required: false
+    description: ""
+runs:
+  using: composite
+  steps:
+    - name: view environment
+      shell: bash
+      run: |
+        echo "My input env is - ${{ inputs.environment }}"
+
+    - name: Testing
+      shell: bash
+      run: |
+        echo "prodeast - ${{ inputs.PROD_EAST }}"
+        echo "dev - ${{ inputs.S3_BUCKET }}"
+        ls -la ./

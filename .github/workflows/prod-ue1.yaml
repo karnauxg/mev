@@ -1,0 +1,44 @@
+name: Deploy-UE1-main
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Select environment'
+        required: true
+        default: 'none'
+        type: choice
+        options:
+        - none
+        - prodeast
+        - dev
+
+jobs:
+  prod-ue1:
+    if: ${{ github.ref_name == 'main' && github.event.inputs.environment == 'prodeast' }}
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      
+      - name: Build-Deploy-${{ github.event.inputs.environment }}
+        uses: ./.github/actions/build-deploy-flow
+        with:
+          environment: ${{ github.event.inputs.environment }}
+          PROD_EAST: ${{ vars.PROD_EAST }}
+          CLOUDFRONT_DISTRIBUTION_ID: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
+
+  dev:
+    if: ${{ github.ref_name == 'main' && github.event.inputs.environment == 'dev' }}
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      
+      - name: Build-Deploy-${{ github.event.inputs.environment }}
+        uses: ./.github/workflows/build-deploy-flow
+        with:
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          environment: ${{ github.event.inputs.environment }}
+          S3_BUCKET: ${{ vars.S3_BUCKET }}
